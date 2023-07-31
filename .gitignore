@@ -1,0 +1,27 @@
+# Ignore system-specific temporary files
+*~
+.DS_Store
+
+# Ignore binary files
+*.exe
+*.bin
+
+# Ignore compiled files and directories
+/bin/
+/build/
+/dist/
+/vendor/
+
+# Ignore Go-related directories
+/.idea/
+/.vscode/
+/go.mod
+/go.sum
+
+# Ignore environment files
+.env
+
+# Ignore log files
+/logs/
+
+# Ignore any other files or directories specific to your project that you don't want to track in version control
