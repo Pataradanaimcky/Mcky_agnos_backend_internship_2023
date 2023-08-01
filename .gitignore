@@ -15,8 +15,6 @@
 # Ignore Go-related directories
 /.idea/
 /.vscode/
-/go.mod
-/go.sum
 
 # Ignore environment files
 .env
