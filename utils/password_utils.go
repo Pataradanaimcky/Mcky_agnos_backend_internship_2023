@@ -10,14 +10,12 @@ const (
 func CountActionsToMakePasswordStrong(password string) (int, bool) {
 	actions := 0
 
-	// Check the password length and apply appropriate actions
 	if len(password) < minPasswordLength {
 		actions += minPasswordLength - len(password)
 	} else if len(password) > maxPasswordLength {
 		actions += len(password) - maxPasswordLength
 	}
 
-	// Check for missing character types and apply actions
 	if !hasLowerCase(password) {
 		actions++
 	}
@@ -34,10 +32,8 @@ func CountActionsToMakePasswordStrong(password string) (int, bool) {
 		actions++
 	}
 
-	// Check for repeating characters and apply actions
 	actions += countRepeatingCharactersActions(password) - 1
 
-	// Determine if the password is strong based on the number of actions needed
 	isStrong := actions == 0
 
 	return actions, isStrong

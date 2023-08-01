@@ -19,12 +19,10 @@ func main() {
 
 	fmt.Println("DATABASE_URL:", os.Getenv("DATABASE_URL"))
 
-	// Connect to the PostgreSQL database
 	db.InitDatabase()
 	connStr := os.Getenv("DATABASE_URL")
 	fmt.Println("Connection string:", connStr)
 
-	// Create the "logs" table if it doesn't exist
 	fmt.Println("Creating logs table...")
 	err = db.CreateLogsTable()
 	if err != nil {
@@ -32,16 +30,12 @@ func main() {
 	}
 	fmt.Println("Logs table created successfully.")
 
-	// Create a new Gin router
 	router := gin.Default()
 
-	// Add the middleware to log requests and responses
 	router.Use(api.RequestLogger())
 
-	// Set up routes
 	api.SetupRoutes(router)
 
-	// Start the server
 	errServer := router.Run(":8080")
 	if errServer != nil {
 		log.Fatal("Failed to start the server: ", errServer)

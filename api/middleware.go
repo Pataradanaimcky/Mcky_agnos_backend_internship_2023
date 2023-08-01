@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RequestLogger is a middleware to log incoming requests and their processing time.
 func RequestLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		startTime := time.Now()
@@ -21,7 +20,6 @@ func RequestLogger() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		latency := time.Since(startTime)
 
-		// Log the request info in the database
 		db.LogRequestInfo(clientIP, requestMethod, requestPath, requestProto, statusCode, latency)
 	}
 }

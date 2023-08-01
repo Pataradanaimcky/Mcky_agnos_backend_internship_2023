@@ -17,12 +17,9 @@ func StrongPasswordStepsHandler(c *gin.Context) {
 		return
 	}
 
-	// Calculate the number of steps required to make the password strong
 	numOfSteps, _ := utils.CountActionsToMakePasswordStrong(requestData.InitPassword)
 
-	// Log the request in the database
 	db.LogRequest(requestData.InitPassword, "Recommendation")
 
-	// Return the number of steps as a response
 	c.JSON(http.StatusOK, gin.H{"num_of_steps": numOfSteps})
 }
