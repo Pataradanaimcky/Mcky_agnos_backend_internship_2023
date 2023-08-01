@@ -1,32 +1,49 @@
 package main
 
 import (
+	"Mcky_agnos_backend_internship_2023/api"
+	"Mcky_agnos_backend_internship_2023/db"
+	"fmt"
 	"log"
-	"strong_password_backend/handlers"
-	"strong_password_backend/services"
-
-	"./db"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Initialize the database
-	db, err := db.NewDB()
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Failed to connect to the database: ", err)
+		log.Fatal("Error loading .env file")
 	}
 
-	// Initialize services and handlers
-	passwordService := services.NewPasswordService()
-	passwordHandler := handlers.NewPasswordHandler(passwordService)
+	fmt.Println("DATABASE_URL:", os.Getenv("DATABASE_URL"))
 
-	// Set up Gin router
+	// Connect to the PostgreSQL database
+	db.InitDatabase()
+	connStr := os.Getenv("DATABASE_URL")
+	fmt.Println("Connection string:", connStr)
+
+	// Create the "logs" table if it doesn't exist
+	fmt.Println("Creating logs table...")
+	err = db.CreateLogsTable()
+	if err != nil {
+		log.Fatal("Failed to create logs table: ", err)
+	}
+	fmt.Println("Logs table created successfully.")
+
+	// Create a new Gin router
 	router := gin.Default()
 
-	// Strong password steps API
-	router.POST("/api/strong_password_steps", passwordHandler.GetStrongPasswordSteps)
+	// Add the middleware to log requests and responses
+	router.Use(api.RequestLogger())
+
+	// Set up routes
+	api.SetupRoutes(router)
 
 	// Start the server
-	router.Run(":8080")
+	errServer := router.Run(":8080")
+	if errServer != nil {
+		log.Fatal("Failed to start the server: ", errServer)
+	}
 }
